@@ -149,7 +149,6 @@ GameObject:
   - component: {fileID: 435319817}
   - component: {fileID: 435319819}
   - component: {fileID: 435319818}
-  - component: {fileID: 435319820}
   m_Layer: 5
   m_Name: Main Title
   m_TagString: Untagged
@@ -273,20 +272,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 435319816}
   m_CullTransparentMesh: 1
---- !u!114 &435319820
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 435319816}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d4d9fdfddaf69749b4e5533dbc734da, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CharacterSelectionScreen: 
-  optionsScreen: {fileID: 0}
 --- !u!1 &523049280
 GameObject:
   m_ObjectHideFlags: 0
@@ -483,7 +468,7 @@ PrefabInstance:
     - target: {fileID: 3242843876364877274, guid: 4ab8dd30b3980d64fb23d8bfde3d5634, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 435319820}
+      objectReference: {fileID: 939199350}
     - target: {fileID: 3242843876364877274, guid: 4ab8dd30b3980d64fb23d8bfde3d5634, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
@@ -984,7 +969,7 @@ PrefabInstance:
     - target: {fileID: 3242843876364877274, guid: 4ab8dd30b3980d64fb23d8bfde3d5634, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 435319820}
+      objectReference: {fileID: 0}
     - target: {fileID: 3242843876364877274, guid: 4ab8dd30b3980d64fb23d8bfde3d5634, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
