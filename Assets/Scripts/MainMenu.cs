@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 public class MainMenu : MonoBehaviour
 {
     public string CharacterSelectionScreen;
-
     public GameObject optionsScreen;
 
     void Start()
