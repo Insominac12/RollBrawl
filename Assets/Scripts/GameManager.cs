@@ -1,45 +1,58 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
 
-    public GameObject newTile;
+    public GameObject[] typeTile;
+    public Transform zonePrefab;
+
     public Vector2 newPosition;
     public Quaternion newRotation;
 
     public GameObject map;
 
-    public int[] howManyTilesSpawn;
+    public Transform parentZone;
+
+    public int howManyTilesSpawn;
 
     public Vector2[] tileSpawns;
-    public Transform[] zoneSpawns;
 
-    private int x, y;
-
+    public List<Transform> zoneSpawns = new List<Transform>();
     
     void Start()
     {
-        for (int i = 0; i < howManyTilesSpawn[0]; i++)
+
+        int randomMap = Random.Range(8, 11);
+
+        //Randomizare a mapei, mai exact cate zone sa se spawneze cand se creeaza mapa
+        for (int i = 0; i < randomMap; i++)
         {
-            InstantianteNewTile(0, zoneSpawns[0]);
+            Transform newZone = Instantiate(zonePrefab, parentZone);
+
+            zoneSpawns.Add(newZone);
         }
 
-        for (int i = 0; i < howManyTilesSpawn[1]; i++)
+        for (int i = 0; i < zoneSpawns.Count - 1; i++)
         {
-            InstantianteNewTile(1, zoneSpawns[1]);
+
+            //Setari de randomizare a mapei
+            howManyTilesSpawn = Random.Range(2, 6);
+
+            for (int j = 0; j < howManyTilesSpawn; j++)
+            {
+                int random = Random.Range(0, 3);
+
+                InstantianteNewTile(random, 0, zoneSpawns[i]);
+
+            }
         }
 
-        for (int i = 0; i < howManyTilesSpawn[2]; i++)
-        {
-            InstantianteNewTile(2, zoneSpawns[2]);
-        }
-
-        for (int i = 0; i < howManyTilesSpawn[3]; i++)
-        {
-            InstantianteNewTile(3, zoneSpawns[3]);
-        }
+        //Face ca ultima zona sa fie mereu boss-ul
+        InstantianteNewTile(3,3, zoneSpawns[zoneSpawns.Count - 1]);
+        
     }
 
     private void OnDrawGizmos()
@@ -63,8 +76,8 @@ public class GameManager : MonoBehaviour
         
     }
 
-    public void InstantianteNewTile(int typeSpawn, Transform parent)
+    public void InstantianteNewTile(int typeTiles,int typeSpawn, Transform parent)
     {
-        Instantiate(newTile, tileSpawns[typeSpawn], newRotation, parent) ;
+        Instantiate(typeTile[typeTiles], tileSpawns[typeSpawn], newRotation, parent) ;
     }
 }
