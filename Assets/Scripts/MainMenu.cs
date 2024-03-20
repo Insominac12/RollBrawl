@@ -5,8 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
-    public string CharacterSelectionScreen;
+    
     public GameObject optionsScreen;
+    public GameObject characterselectionScreen;
 
     void Start()
     {
@@ -19,9 +20,12 @@ public class MainMenu : MonoBehaviour
     }
     public void StartGame()
     {
-        SceneManager.LoadScene(CharacterSelectionScreen);
+      characterselectionScreen.SetActive(true);
+    }   
+    public void CloseCharacterselectionscreen()
+    {
+      characterselectionScreen.SetActive(false);
     }
-
     public void OpenOptions()
     {
        optionsScreen.SetActive(true);
