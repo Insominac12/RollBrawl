@@ -1,83 +1,170 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    [SerializeField] private int waves;
+    [SerializeField] private TextMeshProUGUI wavesText;
 
-    public GameObject[] typeTile;
-    public Transform zonePrefab;
+    [SerializeField] private GameObject arenaZone;
 
-    public Vector2 newPosition;
-    public Quaternion newRotation;
+    [SerializeField] private GameObject playerLost;
 
-    public GameObject map;
+    //Spawner
+    [SerializeField] private GameObject[] normalMonsters;
+    [SerializeField] private GameObject[] eliteMonsters;
+    [SerializeField] private GameObject[] bossMonsters;
 
-    public Transform parentZone;
+    //Player
+    [SerializeField] private Slider healthPlayer;
 
-    public int howManyTilesSpawn;
+    [SerializeField] private int[] abilitiesCooldown;
 
-    public Vector2[] tileSpawns;
+    [SerializeField] private bool playerCanAttack;
+    [SerializeField] private int[] abilitiesDamage;
 
-    public List<Transform> zoneSpawns = new List<Transform>();
-    
+    [SerializeField] private Transform playerPositionEffects;
+    [SerializeField] private bool[] playerEffects;
+    [SerializeField] private GameObject[] playerEffectsSprites;
+
+    //Monster
+    [SerializeField] private bool foundMonster = false;
+    [SerializeField] private bool findMonster;
+    [SerializeField] private MonsterManager monsterStats;
+
+    //Positions
+    [SerializeField] private Vector2[] positionsMonster;
+
+    // Start is called before the first frame update
     void Start()
     {
-
-        int randomMap = Random.Range(8, 11);
-
-        //Randomizare a mapei, mai exact cate zone sa se spawneze cand se creeaza mapa
-        for (int i = 0; i < randomMap; i++)
-        {
-            Transform newZone = Instantiate(zonePrefab, parentZone);
-
-            zoneSpawns.Add(newZone);
-        }
-
-        for (int i = 0; i < zoneSpawns.Count - 1; i++)
-        {
-
-            //Setari de randomizare a mapei
-            howManyTilesSpawn = Random.Range(2, 6);
-
-            for (int j = 0; j < howManyTilesSpawn; j++)
-            {
-                int random = Random.Range(0, 3);
-
-                InstantianteNewTile(random, 0, zoneSpawns[i]);
-
-            }
-        }
-
-        //Face ca ultima zona sa fie mereu boss-ul
-        InstantianteNewTile(3,3, zoneSpawns[zoneSpawns.Count - 1]);
         
     }
 
-    private void OnDrawGizmos()
-    {
-        int x = Screen.width / 2;
-        int y = Screen.height / 2;
-
-        Gizmos.color = Color.red;
-
-        Gizmos.DrawWireCube(map.transform.position, new Vector2(1920, 1080));
-
-        Gizmos.DrawWireCube(tileSpawns[0], new Vector2(480, 900));
-        Gizmos.DrawWireCube(tileSpawns[1], new Vector2(480, 900));
-        Gizmos.DrawWireCube(tileSpawns[2], new Vector2(480, 900));
-        Gizmos.DrawWireCube(tileSpawns[3], new Vector2(480, 900));
-    }
-
-
+    // Update is called once per frame
     void Update()
     {
-        
+        if (!foundMonster)
+        {
+            
+            monsterStats = arenaZone.GetComponentInChildren<MonsterManager>();
+
+            if (monsterStats != null)
+            {
+                foundMonster = true;
+                findMonster = false;
+                Debug.Log("A fost gasit monstrul!");
+            }
+
+        }
+
+        if (monsterStats.dead)
+        {
+            playerCanAttack = false;
+
+            if (findMonster == false)
+            {
+                findMonster = true;
+                //Waves();
+            }
+        }
+        else
+        {
+            playerCanAttack = true;
+        }
     }
 
-    public void InstantianteNewTile(int typeTiles,int typeSpawn, Transform parent)
+    public void Pause(int pause)
     {
-        Instantiate(typeTile[typeTiles], tileSpawns[typeSpawn], newRotation, parent) ;
+        if(pause == 0)
+        {
+            Time.timeScale = 0;
+        }
+        else
+        {
+            Time.timeScale = 1;
+        }
+    }
+
+
+    public void PlayerDamaged()
+    {
+        healthPlayer.value -= monsterStats.abilitiesDamage[0];
+
+        if(healthPlayer.value <= 0)
+        {
+            playerLost.SetActive(true);
+        }
+    }
+
+    public void Waves()
+    {
+        if(monsterStats.dead == true || !foundMonster)
+        {
+            waves += 1;
+            wavesText.text = "Nivele " + waves + "/" + "10";
+
+            if (waves >= 10)
+            {
+                Instantiate(eliteMonsters[0], Vector3.zero, Quaternion.identity, arenaZone.transform);
+                Debug.Log("S-a spawnat monstrul elita!");
+            }
+            else
+            {
+                Instantiate(normalMonsters[0], Vector3.zero, Quaternion.identity, arenaZone.transform);
+                Debug.Log("S-a spawnat monstru normal!");
+            }
+            foundMonster = false;
+        }
+    }
+
+    public void PlayerAttack(int whatAttack)
+    {
+        if(playerCanAttack == true)
+        {
+            Ability(whatAttack);
+        }
+    }
+
+    public void Ability(int whatAbility)
+    {
+        switch (whatAbility)
+        {
+            case 3:
+                PlayerFourthAbiility();
+                break;
+            case 2:
+                PlayerThirdAbiility();
+                break;
+            case 1:
+                PlayerSecondAbiility();
+                break;
+            case 0:
+                PlayerFirstAbiility();
+                break;
+        }
+    }
+
+    public void PlayerFirstAbiility()
+    {
+        monsterStats.healthMonster -= abilitiesDamage[0];
+    }
+
+    public void PlayerSecondAbiility()
+    {
+        monsterStats.healthMonster -= abilitiesDamage[1];
+    }
+
+    public void PlayerThirdAbiility()
+    {
+        monsterStats.healthMonster -= abilitiesDamage[2];
+    }
+
+    public void PlayerFourthAbiility()
+    {
+        monsterStats.healthMonster -= abilitiesDamage[3];
     }
 }
