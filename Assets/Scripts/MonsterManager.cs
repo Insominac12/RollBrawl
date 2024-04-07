@@ -18,6 +18,9 @@ public class MonsterManager : MonoBehaviour
     public int[] abilitiesDamage;
     public int[] abilitiesCooldown;
 
+    public Animator anim;
+    public bool animDead;
+    public string[] typeAnim;
 
     // Start is called before the first frame update
     void Start()
@@ -33,7 +36,12 @@ public class MonsterManager : MonoBehaviour
         if (healthSlider.value <= 0)
         {
             dead = true;
-            Destroy(this.gameObject, 5f);
+            Destroy(this.gameObject, 2f);
+
+
+            anim.Play(typeAnim[0]);
         }
     }
+
+
 }
