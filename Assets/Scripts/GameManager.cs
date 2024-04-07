@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -25,6 +26,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Slider healthPlayer;
 
     [SerializeField] private int[] abilitiesCooldown;
+    [SerializeField] private int[] maxAbilitesCooldown;
     [SerializeField] private bool[] onCooldownAbility;
 
     [SerializeField] private bool playerCanAttack;
@@ -42,7 +44,16 @@ public class GameManager : MonoBehaviour
     [SerializeField] private MonsterManager monsterStats;
 
     //Positions
-    [SerializeField] private Vector2[] positionsMonster;
+    [SerializeField] private Transform abilitiesParent;
+    [SerializeField] private Vector2[] abilitesPositions;
+
+    [SerializeField] private GameObject prefabAbilityCooldown;
+
+    [SerializeField] private List<GameObject> prefabsAC = new List<GameObject>();
+    [SerializeField] private List<int> indexPrefabsAC = new List<int>();
+    [SerializeField] private int[] index;
+
+    [SerializeField] private GameObject[] abilitesButtons;
 
     [SerializeField] private DiceManager dm;
 
@@ -74,6 +85,11 @@ public class GameManager : MonoBehaviour
             Debug.Log("Monstrul este mort!");
             playerCanAttack = false;
 
+            for (int i = 0; i < abilitesButtons.Length; i++)
+            {
+                abilitesButtons[i].GetComponent<Button>().interactable = false;
+            }
+
             if (findMonster == false)
             {
                 findMonster = true;
@@ -86,17 +102,33 @@ public class GameManager : MonoBehaviour
         else
         {
             playerCanAttack = true;
+
         }
 
-        for (int i = 0; i < onCooldownAbility.Length - 1; i++)
+        for (int i = 0; i < onCooldownAbility.Length; i++)
         {
             if (abilitiesCooldown[i] <= 0)
             {
-                onCooldownAbility[i] = false;
+                onCooldownAbility[index[i]] = false;
+
+                if (onCooldownAbility[index[i]] == false)
+                {
+                    abilitiesCooldown[i] = maxAbilitesCooldown[i];
+
+                    Destroy(prefabsAC[index[i]].gameObject);
+
+                    prefabsAC.Remove(prefabsAC[index[i]]);
+                    indexPrefabsAC.Remove(index[i]);
+                }
             }
         }
 
-        if(playerTurn == false)
+        for (int i = 0; i < prefabsAC.Count - 1; i++)
+        {
+            prefabsAC[index[i]].GetComponentInChildren<TextMeshProUGUI>().text = abilitiesCooldown[i].ToString();
+        }
+
+        if (playerTurn == false)
         {
             MonsterAttack(Random.Range(0,4));
         }
@@ -149,6 +181,12 @@ public class GameManager : MonoBehaviour
 
             foundMonster = false;
             findMonster = false;
+
+            for (int i = 0; i < abilitesButtons.Length; i++)
+            {
+                abilitesButtons[i].GetComponent<Button>().interactable = true;
+            }
+
         }
     }
 
@@ -157,7 +195,11 @@ public class GameManager : MonoBehaviour
         if(playerCanAttack == true && playerTurn == true)
         {
             PlayerAbility(whatAttack);
-            playerTurn = false;
+        }
+
+        for (int i = 0; i < abilitesButtons.Length; i++)
+        {
+            abilitesButtons[i].GetComponent<Button>().interactable = false;
         }
     }
 
@@ -166,68 +208,128 @@ public class GameManager : MonoBehaviour
 
         MonsterAbility(whatAttack);
 
-        for (int i = 0; i < onCooldownAbility.Length - 1; i++)
+        for (int i = 0; i < onCooldownAbility.Length; i++)
         {
-            abilitiesCooldown[i] -= 1;
+            if (onCooldownAbility[index[i]] == true)
+            {
+                abilitiesCooldown[i] -= 1;
+            }
         }
 
         playerTurn = true;
+
+        for (int i = 0; i < abilitesButtons.Length; i++)
+        {
+            abilitesButtons[i].GetComponent<Button>().interactable = true;
+        }
     }
+
+    #region Player
 
     public void PlayerAbility(int whatAbility)
     {
+        dm.RollDices();
+
         switch (whatAbility)
         {
             case 3:
-                PlayerFourthAbiility();
+
+                prefabsAC.Add(Instantiate(prefabAbilityCooldown, abilitiesParent));
+                prefabsAC.LastOrDefault().transform.localPosition = abilitesPositions[3];
+                prefabsAC.LastOrDefault().GetComponentInChildren<TextMeshProUGUI>().text = abilitiesCooldown[3].ToString();
+
+                indexPrefabsAC.Add(prefabsAC.IndexOf(prefabsAC.LastOrDefault()));
+
+                index[3] = indexPrefabsAC.LastOrDefault();
+
+                Invoke("PlayerFourthAbiility", 7f);
                 break;
             case 2:
-                PlayerThirdAbiility();
+
+                prefabsAC.Add(Instantiate(prefabAbilityCooldown, abilitiesParent));
+                prefabsAC.LastOrDefault().transform.localPosition = abilitesPositions[2];
+                prefabsAC.LastOrDefault().GetComponentInChildren<TextMeshProUGUI>().text = abilitiesCooldown[2].ToString();
+
+                indexPrefabsAC.Add(prefabsAC.IndexOf(prefabsAC.LastOrDefault()));
+
+                index[2] = indexPrefabsAC.LastOrDefault();
+
+                Invoke("PlayerThirdAbiility", 7f);
                 break;
             case 1:
-                PlayerSecondAbiility();
+
+                prefabsAC.Add(Instantiate(prefabAbilityCooldown, abilitiesParent));
+                prefabsAC.LastOrDefault().transform.localPosition = abilitesPositions[1];
+                prefabsAC.LastOrDefault().GetComponentInChildren<TextMeshProUGUI>().text = abilitiesCooldown[1].ToString();
+
+                indexPrefabsAC.Add(prefabsAC.IndexOf(prefabsAC.LastOrDefault()));
+
+                index[1] = indexPrefabsAC.LastOrDefault();
+
+                Invoke("PlayerSecondAbiility", 7f);
                 break;
             case 0:
-                PlayerFirstAbiility();
+
+                prefabsAC.Add(Instantiate(prefabAbilityCooldown, abilitiesParent));
+                prefabsAC.LastOrDefault().transform.localPosition = abilitesPositions[0];
+                prefabsAC.LastOrDefault().GetComponentInChildren<TextMeshProUGUI>().text = abilitiesCooldown[0].ToString();
+
+                indexPrefabsAC.Add(prefabsAC.IndexOf(prefabsAC.LastOrDefault()));
+
+                index[0] = indexPrefabsAC.LastOrDefault();
+
+                Invoke("PlayerFirstAbiility", 7f);
                 break;
         }
     }
 
     public void PlayerFirstAbiility()
     {
-        if (!onCooldownAbility[0])
+        if (!onCooldownAbility[index[0]])
         {
             monsterStats.healthMonster -= abilitiesDamage[0] * dm.resultDices;
-            onCooldownAbility[0] = true;
+            onCooldownAbility[index[0]] = true;
         }
+
+        playerTurn = false;
     }
 
     public void PlayerSecondAbiility()
     {
-        if (!onCooldownAbility[1])
+        if (!onCooldownAbility[index[1]])
         {
             monsterStats.healthMonster -= abilitiesDamage[1] * dm.resultDices;
-            onCooldownAbility[1] = true;
+            onCooldownAbility[index[1]] = true;
         }
+
+        playerTurn = false;
     }
 
     public void PlayerThirdAbiility()
     {
-        if (!onCooldownAbility[2])
+        if (!onCooldownAbility[index[2]])
         {
             monsterStats.healthMonster -= abilitiesDamage[2] * dm.resultDices;
-            onCooldownAbility[2] = true;
+            onCooldownAbility[index[2]] = true;
         }
+
+        playerTurn = false;
     }
 
     public void PlayerFourthAbiility()
     {
-        if (!onCooldownAbility[3])
+        if (!onCooldownAbility[index[3]])
         {
             monsterStats.healthMonster -= abilitiesDamage[3] * dm.resultDices;
-            onCooldownAbility[3] = true;
+            onCooldownAbility[index[3]] = true;
         }
+
+        playerTurn = false;
     }
+
+#endregion
+
+    #region Monster
 
     public void MonsterAbility(int whatAbility)
     {
@@ -250,37 +352,31 @@ public class GameManager : MonoBehaviour
 
     public void MonsterFirstAbiility()
     {
-        if (!onCooldownAbility[0])
-        {
+        
             healthPlayer.value -= abilitiesDamage[0];
-            onCooldownAbility[0] = true;
-        }
+        
     }
 
     public void MonsterSecondAbiility()
     {
-        if (!onCooldownAbility[1])
-        {
+        
             healthPlayer.value -= abilitiesDamage[1];
-            onCooldownAbility[1] = true;
-        }
+         
     }
 
     public void MonsterThirdAbiility()
     {
-        if (!onCooldownAbility[2])
-        {
+       
             healthPlayer.value -= abilitiesDamage[2];
-            onCooldownAbility[2] = true;
-        }
+        
     }
 
     public void MonsterFourthAbiility()
     {
-        if (!onCooldownAbility[3])
-        {
+        
             healthPlayer.value -= abilitiesDamage[3];
-            onCooldownAbility[3] = true;
-        }
+        
     }
+
+    #endregion
 }

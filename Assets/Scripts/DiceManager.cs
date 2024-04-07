@@ -17,15 +17,12 @@ public class DiceManager : MonoBehaviour
 
     public int resultDices;
 
-    public GameObject button;
-
     public void RollDices()
     {
         Animator animLeftDice = leftDice.GetComponent<Animator>();
         Animator animRightDice = rightDice.GetComponent<Animator>();
 
         result.gameObject.SetActive(false);
-        button.gameObject.SetActive(false);
 
         animLeftDice.enabled = true;
         animRightDice.enabled = true;
