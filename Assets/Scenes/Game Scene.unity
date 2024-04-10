@@ -490,7 +490,7 @@ GameObject:
   - component: {fileID: 204637234}
   - component: {fileID: 204637233}
   m_Layer: 5
-  m_Name: Gardiens
+  m_Name: Elite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -535,7 +535,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Gardieni 0/4
+  m_text: Elite 0/3
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c4123468bd06c3b42b20abbb0c591d3b, type: 2}
   m_sharedMaterial: {fileID: -4237262082890844045, guid: c4123468bd06c3b42b20abbb0c591d3b, type: 2}
@@ -904,10 +904,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1260320306}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 12.5, y: -12.5}
+  m_SizeDelta: {x: 25, y: 25}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &309872023
 MonoBehaviour:
@@ -979,10 +979,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1260320306}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 72.5, y: -12.5}
+  m_SizeDelta: {x: 25, y: 25}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &336945146
 MonoBehaviour:
@@ -2072,10 +2072,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1260320306}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 102.5, y: -12.5}
+  m_SizeDelta: {x: 25, y: 25}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &810513193
 MonoBehaviour:
@@ -2546,24 +2546,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b8c1c2bae034b84f90821d7779b9088, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waves: 0
-  gardiensDefeated: 0
+  waves: 1
+  eliteDefeated: 0
   wavesText: {fileID: 1396506769}
-  gardiensText: {fileID: 204637233}
+  eliteText: {fileID: 204637233}
   arenaZone: {fileID: 669660207}
   playerLost: {fileID: 1298598569}
   normalMonsters:
   - {fileID: 3166102498749336342, guid: c8df05c7699aa51448e05d9e67790cd6, type: 3}
   eliteMonsters:
-  - {fileID: 3166102498749336342, guid: d7b00253cf213e44bb23b163e4e9e476, type: 3}
+  - {fileID: 3166102498749336342, guid: 73b4a6b37679c70498eaa06f9272574b, type: 3}
   bossMonsters:
-  - {fileID: 3166102498749336342, guid: c8df05c7699aa51448e05d9e67790cd6, type: 3}
+  - {fileID: 3166102498749336342, guid: 26964124fb7ac6042bbf3d989ec29488, type: 3}
   healthPlayer: {fileID: 2003245578}
-  abilitiesCooldown: 03000000040000000200000005000000
-  maxAbilitesCooldown: 01000000030000000200000005000000
-  onCooldownAbility: 00000000
+  abilitiesCooldown: 0000000003000000
+  maxAbilitesCooldown: 0000000003000000
+  onCooldownAbility: 0000
   playerCanAttack: 0
-  abilitiesDamage: 0f0000001e0000002d0000003c000000
+  abilitiesDamage: 1400000028000000
+  monsterAbilitiesDamage: 050000000a000000
   playerPositionEffects: {fileID: 0}
   playerEffects: 
   playerEffectsSprites: []
@@ -2571,12 +2572,11 @@ MonoBehaviour:
   foundMonster: 0
   findMonster: 0
   monsterStats: {fileID: 0}
+  monsterCanAttack: 1
   abilitiesParent: {fileID: 465888045}
   abilitesPositions:
   - {x: 0, y: 0}
   - {x: 130, y: 0}
-  - {x: 260, y: 0}
-  - {x: 390, y: 0}
   prefabAbilityCooldown: {fileID: 453022527304757220, guid: 300b8fabd187e624e8b401587e741b71, type: 3}
   prefabsAC: []
   indexPrefabsAC: 
@@ -2619,10 +2619,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1260320306}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 42.5, y: -12.5}
+  m_SizeDelta: {x: 25, y: 25}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1087006407
 MonoBehaviour:
@@ -2769,10 +2769,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1260320306}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 132.5, y: -12.5}
+  m_SizeDelta: {x: 25, y: 25}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1120479757
 MonoBehaviour:
@@ -2965,7 +2965,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1260320306
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3177,7 +3177,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Nivele 1/50
+  m_text: Nivele 1/15
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c4123468bd06c3b42b20abbb0c591d3b, type: 2}
   m_sharedMaterial: {fileID: -4237262082890844045, guid: c4123468bd06c3b42b20abbb0c591d3b, type: 2}
@@ -3460,8 +3460,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -625, y: -101}
-  m_SizeDelta: {x: 144.7274, y: 107.1474}
+  m_AnchoredPosition: {x: -611, y: 176}
+  m_SizeDelta: {x: 600, y: 266.6667}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1506356965
 MonoBehaviour:
@@ -3477,7 +3477,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 0
+  m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -4277,9 +4277,9 @@ MonoBehaviour:
   m_HandleRect: {fileID: 0}
   m_Direction: 0
   m_MinValue: 0
-  m_MaxValue: 100
+  m_MaxValue: 3000
   m_WholeNumbers: 1
-  m_Value: 100
+  m_Value: 3000
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []

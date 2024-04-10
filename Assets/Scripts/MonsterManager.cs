@@ -22,10 +22,13 @@ public class MonsterManager : MonoBehaviour
     public bool animDead;
     public string[] typeAnim;
 
+    public bool isElite;
+    public bool isBoss;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        healthSlider.maxValue = healthMonster;
     }
 
     // Update is called once per frame

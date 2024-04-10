@@ -8,10 +8,10 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private int waves;
-    [SerializeField] private int gardiensDefeated;
+    [SerializeField] private int eliteDefeated;
 
     [SerializeField] private TextMeshProUGUI wavesText;
-    [SerializeField] private TextMeshProUGUI gardiensText;
+    [SerializeField] private TextMeshProUGUI eliteText;
 
     [SerializeField] private GameObject arenaZone;
 
@@ -32,6 +32,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private bool playerCanAttack;
     [SerializeField] private int[] abilitiesDamage;
 
+    [SerializeField] private int[] monsterAbilitiesDamage;
+
     [SerializeField] private Transform playerPositionEffects;
     [SerializeField] private bool[] playerEffects;
     [SerializeField] private GameObject[] playerEffectsSprites;
@@ -42,6 +44,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private bool foundMonster = false;
     [SerializeField] private bool findMonster;
     [SerializeField] private MonsterManager monsterStats;
+    [SerializeField] private bool monsterCanAttack;
 
     //Positions
     [SerializeField] private Transform abilitiesParent;
@@ -66,6 +69,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Cautare monstru
         if (!foundMonster)
         {
             
@@ -80,10 +84,20 @@ public class GameManager : MonoBehaviour
 
         }
 
+        for (int i = 0; i < prefabsAC.Count; i++)
+        {
+            Debug.Log("Se updateaza cooldown-ul!");
+            prefabsAC[index[i]].GetComponentInChildren<TextMeshProUGUI>().text = abilitiesCooldown[i + 1].ToString();
+        }
+
+        //Daca monstrul este mort se va spawna altul, playerul nu poate ataca sau face vreo actiune cat timp un monstru nu exista
         if (monsterStats.dead)
         {
+
             Debug.Log("Monstrul este mort!");
             playerCanAttack = false;
+            monsterCanAttack = false;
+            playerTurn = true;
 
             for (int i = 0; i < abilitesButtons.Length; i++)
             {
@@ -105,35 +119,47 @@ public class GameManager : MonoBehaviour
 
         }
 
-        for (int i = 0; i < onCooldownAbility.Length; i++)
+        //Cooldown script
+        for (int i = 1; i < onCooldownAbility.Length; i++)
         {
             if (abilitiesCooldown[i] <= 0)
             {
                 onCooldownAbility[index[i]] = false;
 
-                if (onCooldownAbility[index[i]] == false)
-                {
-                    abilitiesCooldown[i] = maxAbilitesCooldown[i];
+                abilitiesCooldown[i] = maxAbilitesCooldown[i];
 
-                    Destroy(prefabsAC[index[i]].gameObject);
+                Destroy(prefabsAC[index[i]].gameObject);
 
-                    prefabsAC.Remove(prefabsAC[index[i]]);
-                    indexPrefabsAC.Remove(index[i]);
-                }
+                prefabsAC.Remove(prefabsAC[index[i]]);
+                indexPrefabsAC.Remove(index[i]);
+                
             }
         }
 
-        for (int i = 0; i < prefabsAC.Count - 1; i++)
+        //Dupa ce ataca playerul urmeaza tura monstrului
+        if (playerTurn == false && monsterCanAttack == true)
         {
-            prefabsAC[index[i]].GetComponentInChildren<TextMeshProUGUI>().text = abilitiesCooldown[i].ToString();
-        }
 
-        if (playerTurn == false)
-        {
-            MonsterAttack(Random.Range(0,4));
+            for (int i = 0; i < abilitesButtons.Length; i++)
+            {
+                abilitesButtons[i].GetComponent<Button>().interactable = false;
+            }
+
+            if(monsterCanAttack == true)
+            {
+                if (monsterStats.isElite || monsterStats.isBoss)
+                {
+                    MonsterAttack(Random.Range(0, 2));
+                }
+                else
+                {
+                    MonsterAttack(0);
+                }
+            }
         }
     }
 
+    //Sistem pauza joc, cand playerul intra in setari
     public void Pause(int pause)
     {
         if(pause == 0)
@@ -146,7 +172,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-
+    //Daca playerul moare, jocul se termina
     public void PlayerDamaged()
     {
         healthPlayer.value -= monsterStats.abilitiesDamage[0];
@@ -157,21 +183,32 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    //Script spawnare monstri
     public void Waves()
     {
         if (!foundMonster)
         {
             waves += 1;
-            wavesText.text = "Nivele " + waves + "/" + "50";
+            wavesText.text = "Nivele " + waves + "/" + "15";
 
-            if (waves >= 10)
+            if (waves % 5 == 1)
             {
-                Instantiate(eliteMonsters[0], Vector3.zero, Quaternion.identity, arenaZone.transform);
+                eliteDefeated += 1;
+                eliteText.text = "Elite " + eliteDefeated + "/" + "3";
+            }
+
+            if (waves%5==0)
+            {
+                Instantiate(eliteMonsters[0], eliteMonsters[0].transform.localPosition, Quaternion.identity, arenaZone.transform);
                 Debug.Log("S-a spawnat monstrul elita!");
 
-                wavesText.text = "Lupta Gardian";
+                wavesText.text = "Lupta Elita";
+            }
+            else if (waves >= 15)
+            {
+                Instantiate(bossMonsters[0], bossMonsters[0].transform.localPosition, Quaternion.identity, arenaZone.transform);
 
-                waves = 0;
+                wavesText.text = "Lupta Boss";
             }
             else
             {
@@ -181,6 +218,7 @@ public class GameManager : MonoBehaviour
 
             foundMonster = false;
             findMonster = false;
+            monsterCanAttack = true;
 
             for (int i = 0; i < abilitesButtons.Length; i++)
             {
@@ -190,6 +228,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    //Script pentru atac
     public void PlayerAttack(int whatAttack)
     {
         if(playerCanAttack == true && playerTurn == true)
@@ -208,7 +247,7 @@ public class GameManager : MonoBehaviour
 
         MonsterAbility(whatAttack);
 
-        for (int i = 0; i < onCooldownAbility.Length; i++)
+        for (int i = 1; i < onCooldownAbility.Length; i++)
         {
             if (onCooldownAbility[index[i]] == true)
             {
@@ -218,21 +257,18 @@ public class GameManager : MonoBehaviour
 
         playerTurn = true;
 
-        for (int i = 0; i < abilitesButtons.Length; i++)
-        {
-            abilitesButtons[i].GetComponent<Button>().interactable = true;
-        }
     }
 
     #region Player
 
+    //Tip de atac script
     public void PlayerAbility(int whatAbility)
     {
         dm.RollDices();
 
         switch (whatAbility)
         {
-            case 3:
+            /*case 3:
 
                 prefabsAC.Add(Instantiate(prefabAbilityCooldown, abilitiesParent));
                 prefabsAC.LastOrDefault().transform.localPosition = abilitesPositions[3];
@@ -255,7 +291,8 @@ public class GameManager : MonoBehaviour
                 index[2] = indexPrefabsAC.LastOrDefault();
 
                 Invoke("PlayerThirdAbiility", 7f);
-                break;
+                break;*/
+
             case 1:
 
                 prefabsAC.Add(Instantiate(prefabAbilityCooldown, abilitiesParent));
@@ -270,14 +307,6 @@ public class GameManager : MonoBehaviour
                 break;
             case 0:
 
-                prefabsAC.Add(Instantiate(prefabAbilityCooldown, abilitiesParent));
-                prefabsAC.LastOrDefault().transform.localPosition = abilitesPositions[0];
-                prefabsAC.LastOrDefault().GetComponentInChildren<TextMeshProUGUI>().text = abilitiesCooldown[0].ToString();
-
-                indexPrefabsAC.Add(prefabsAC.IndexOf(prefabsAC.LastOrDefault()));
-
-                index[0] = indexPrefabsAC.LastOrDefault();
-
                 Invoke("PlayerFirstAbiility", 7f);
                 break;
         }
@@ -285,11 +314,9 @@ public class GameManager : MonoBehaviour
 
     public void PlayerFirstAbiility()
     {
-        if (!onCooldownAbility[index[0]])
-        {
-            monsterStats.healthMonster -= abilitiesDamage[0] * dm.resultDices;
-            onCooldownAbility[index[0]] = true;
-        }
+        
+        monsterStats.healthMonster -= abilitiesDamage[0] * dm.resultDices;
+            
 
         playerTurn = false;
     }
@@ -305,7 +332,7 @@ public class GameManager : MonoBehaviour
         playerTurn = false;
     }
 
-    public void PlayerThirdAbiility()
+    /*public void PlayerThirdAbiility()
     {
         if (!onCooldownAbility[index[2]])
         {
@@ -325,7 +352,7 @@ public class GameManager : MonoBehaviour
         }
 
         playerTurn = false;
-    }
+    }*/
 
 #endregion
 
@@ -333,38 +360,49 @@ public class GameManager : MonoBehaviour
 
     public void MonsterAbility(int whatAbility)
     {
+        dm.RollDices();
+
         switch (whatAbility)
         {
-            case 3:
+            /*case 3:
                 MonsterFourthAbiility();
                 break;
             case 2:
                 MonsterThirdAbiility();
-                break;
+                break;*/
             case 1:
-                MonsterSecondAbiility();
+                Invoke("MonsterSecondAbiility", 7f);
                 break;
             case 0:
-                MonsterFirstAbiility();
+                Invoke("MonsterFirstAbiility", 7f);
                 break;
         }
     }
 
     public void MonsterFirstAbiility()
     {
-        
-            healthPlayer.value -= abilitiesDamage[0];
-        
+
+        healthPlayer.value -= monsterAbilitiesDamage[0] * dm.resultDices;
+
+        for (int i = 0; i < abilitesButtons.Length; i++)
+        {
+            abilitesButtons[i].GetComponent<Button>().interactable = true;
+        }
+
     }
 
     public void MonsterSecondAbiility()
     {
         
-            healthPlayer.value -= abilitiesDamage[1];
-         
+        healthPlayer.value -= monsterAbilitiesDamage[1] * dm.resultDices;
+
+        for (int i = 0; i < abilitesButtons.Length; i++)
+        {
+            abilitesButtons[i].GetComponent<Button>().interactable = true;
+        }
     }
 
-    public void MonsterThirdAbiility()
+    /*public void MonsterThirdAbiility()
     {
        
             healthPlayer.value -= abilitiesDamage[2];
@@ -376,7 +414,7 @@ public class GameManager : MonoBehaviour
         
             healthPlayer.value -= abilitiesDamage[3];
         
-    }
+    }*/
 
     #endregion
 }
