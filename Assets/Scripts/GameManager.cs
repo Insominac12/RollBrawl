@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private TextMeshProUGUI wavesText;
     [SerializeField] private TextMeshProUGUI eliteText;
+    [SerializeField] private TextMeshProUGUI turnText;
 
     [SerializeField] private GameObject arenaZone;
 
@@ -21,9 +23,16 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject[] normalMonsters;
     [SerializeField] private GameObject[] eliteMonsters;
     [SerializeField] private GameObject[] bossMonsters;
+    [SerializeField] private GameObject[] lootElite;
+
+    public bool loot;
 
     //Player
     [SerializeField] private Slider healthPlayer;
+
+    public bool rewardAttack;
+    public bool rewardHealth;
+    public bool rewardDice;
 
     [SerializeField] private int[] abilitiesCooldown;
     [SerializeField] private int[] maxAbilitesCooldown;
@@ -40,13 +49,25 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private bool playerTurn;
 
+    [SerializeField] private bool[] rewardsOwned;
+
     //Monster
     [SerializeField] private bool foundMonster = false;
     [SerializeField] private bool findMonster;
     [SerializeField] private MonsterManager monsterStats;
     [SerializeField] private bool monsterCanAttack;
 
-    //Positions
+    //Animatii
+    [SerializeField] private Animator animPlayer;
+    [SerializeField] private string[] animPlayerName;
+
+    //Pasive
+    [SerializeField] private int[] playerPassiveValue;
+    [SerializeField] private int[] normalMonsterPassiveValue;
+    [SerializeField] private int[] eliteMonsterPassiveValue;
+    [SerializeField] private int[] bossMonsterPassiveValue;
+
+    //Positions and abilities
     [SerializeField] private Transform abilitiesParent;
     [SerializeField] private Vector2[] abilitesPositions;
 
@@ -67,8 +88,10 @@ public class GameManager : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
+        
+
         //Cautare monstru
         if (!foundMonster)
         {
@@ -93,11 +116,15 @@ public class GameManager : MonoBehaviour
         //Daca monstrul este mort se va spawna altul, playerul nu poate ataca sau face vreo actiune cat timp un monstru nu exista
         if (monsterStats.dead)
         {
-
-            Debug.Log("Monstrul este mort!");
-            playerCanAttack = false;
             monsterCanAttack = false;
             playerTurn = true;
+            Debug.Log("Monstrul este mort!");
+            playerCanAttack = false;
+
+            turnText.text = "TURA JUCATORULUI";
+            turnText.color = Color.green;
+
+            animPlayer.Play(animPlayerName[2]);
 
             for (int i = 0; i < abilitesButtons.Length; i++)
             {
@@ -116,6 +143,29 @@ public class GameManager : MonoBehaviour
         else
         {
             playerCanAttack = true;
+
+            //Dupa ce ataca playerul urmeaza tura monstrului
+            if (playerTurn == false && monsterCanAttack == true)
+            {
+                for (int i = 0; i < abilitesButtons.Length; i++)
+                {
+                    abilitesButtons[i].GetComponent<Button>().interactable = false;
+                }
+
+                animPlayer.Play(animPlayerName[2]);
+
+                if (monsterCanAttack == true)
+                {
+                    if (monsterStats.isElite || monsterStats.isBoss)
+                    {
+                        MonsterAttack(UnityEngine.Random.Range(0, 2));
+                    }
+                    else
+                    {
+                        MonsterAttack(0);
+                    }
+                }
+            }
 
         }
 
@@ -136,27 +186,7 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        //Dupa ce ataca playerul urmeaza tura monstrului
-        if (playerTurn == false && monsterCanAttack == true)
-        {
-
-            for (int i = 0; i < abilitesButtons.Length; i++)
-            {
-                abilitesButtons[i].GetComponent<Button>().interactable = false;
-            }
-
-            if(monsterCanAttack == true)
-            {
-                if (monsterStats.isElite || monsterStats.isBoss)
-                {
-                    MonsterAttack(Random.Range(0, 2));
-                }
-                else
-                {
-                    MonsterAttack(0);
-                }
-            }
-        }
+        
     }
 
     //Sistem pauza joc, cand playerul intra in setari
@@ -189,13 +219,9 @@ public class GameManager : MonoBehaviour
         if (!foundMonster)
         {
             waves += 1;
-            wavesText.text = "Nivele " + waves + "/" + "15";
+            wavesText.text = "Nivele " + waves + "/" + "16";
 
-            if (waves % 5 == 1)
-            {
-                eliteDefeated += 1;
-                eliteText.text = "Elite " + eliteDefeated + "/" + "3";
-            }
+            
 
             if (waves%5==0)
             {
@@ -204,21 +230,34 @@ public class GameManager : MonoBehaviour
 
                 wavesText.text = "Lupta Elita";
             }
-            else if (waves >= 15)
+            else if (waves >= 17)
             {
                 Instantiate(bossMonsters[0], bossMonsters[0].transform.localPosition, Quaternion.identity, arenaZone.transform);
 
                 wavesText.text = "Lupta Boss";
             }
+            else if (waves % 5 == 1)
+            {
+                eliteDefeated += 1;
+                eliteText.text = "Elite " + eliteDefeated + "/" + "3";
+                GameObject rewards = Instantiate(lootElite[0], lootElite[0].transform.localPosition, Quaternion.identity, arenaZone.transform);
+                loot = true;
+                wavesText.text = "Nivele " + waves + "/" + "16";
+                Debug.Log("S-a spawnat monstru normal!");
+            }
             else
             {
-                Instantiate(normalMonsters[0], normalMonsters[0].transform.localPosition, Quaternion.identity, arenaZone.transform);
-                Debug.Log("S-a spawnat monstru normal!");
+                if(loot == false)
+                {
+                    int randomMon = UnityEngine.Random.Range(0,2);
+                    Instantiate(normalMonsters[randomMon], normalMonsters[randomMon].transform.localPosition, Quaternion.identity, arenaZone.transform);
+                    Debug.Log("S-a spawnat monstru normal!");
+                }
             }
 
             foundMonster = false;
             findMonster = false;
-            monsterCanAttack = true;
+            monsterCanAttack = false;
 
             for (int i = 0; i < abilitesButtons.Length; i++)
             {
@@ -303,11 +342,17 @@ public class GameManager : MonoBehaviour
 
                 index[1] = indexPrefabsAC.LastOrDefault();
 
+                StartCoroutine(PlayPlayerAnimation(4.8f, 1));
+                StartCoroutine(PlayMonsterAnimation(6, 1));
                 Invoke("PlayerSecondAbiility", 7f);
+                StartCoroutine(PlayMonsterAnimation(7, 2));
                 break;
             case 0:
 
+                StartCoroutine(PlayPlayerAnimation(5.5f, 0));
+                StartCoroutine(PlayMonsterAnimation(6, 1));
                 Invoke("PlayerFirstAbiility", 7f);
+                StartCoroutine(PlayMonsterAnimation(7, 2));
                 break;
         }
     }
@@ -316,9 +361,13 @@ public class GameManager : MonoBehaviour
     {
         
         monsterStats.healthMonster -= abilitiesDamage[0] * dm.resultDices;
-            
+
+        monsterCanAttack = true;
 
         playerTurn = false;
+
+        turnText.text = "TURA MONSTRULUI";
+        turnText.color = Color.red;
     }
 
     public void PlayerSecondAbiility()
@@ -329,7 +378,18 @@ public class GameManager : MonoBehaviour
             onCooldownAbility[index[1]] = true;
         }
 
+        monsterCanAttack = true;
         playerTurn = false;
+
+        turnText.text = "TURA MONSTRULUI";
+        turnText.color = Color.red;
+    }
+
+    IEnumerator PlayPlayerAnimation(float time, int animType)
+    {
+        
+        yield return new WaitForSeconds(time);
+        animPlayer.Play(animPlayerName[animType]);
     }
 
     /*public void PlayerThirdAbiility()
@@ -354,7 +414,7 @@ public class GameManager : MonoBehaviour
         playerTurn = false;
     }*/
 
-#endregion
+    #endregion
 
     #region Monster
 
@@ -374,7 +434,11 @@ public class GameManager : MonoBehaviour
                 Invoke("MonsterSecondAbiility", 7f);
                 break;
             case 0:
+                StartCoroutine(PlayMonsterAnimation(5f, 3));
+                StartCoroutine(PlayPlayerAnimation(6, 3));
                 Invoke("MonsterFirstAbiility", 7f);
+                StartCoroutine(PlayPlayerAnimation(8, 2));
+                StartCoroutine(PlayMonsterAnimation(8, 2));
                 break;
         }
     }
@@ -389,6 +453,9 @@ public class GameManager : MonoBehaviour
             abilitesButtons[i].GetComponent<Button>().interactable = true;
         }
 
+        turnText.text = "TURA JUCATORULUI";
+        turnText.color = Color.green;
+
     }
 
     public void MonsterSecondAbiility()
@@ -400,6 +467,9 @@ public class GameManager : MonoBehaviour
         {
             abilitesButtons[i].GetComponent<Button>().interactable = true;
         }
+
+        turnText.text = "TURA JUCATORULUI";
+        turnText.color = Color.green;
     }
 
     /*public void MonsterThirdAbiility()
@@ -415,6 +485,15 @@ public class GameManager : MonoBehaviour
             healthPlayer.value -= abilitiesDamage[3];
         
     }*/
+
+    IEnumerator PlayMonsterAnimation(float time, int animType)
+    {
+
+        yield return new WaitForSeconds(time);
+        monsterStats.anim.Play(monsterStats.typeAnim[animType]);
+    }
+
+    
 
     #endregion
 }
