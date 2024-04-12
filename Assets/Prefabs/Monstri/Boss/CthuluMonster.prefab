@@ -470,7 +470,7 @@ MonoBehaviour:
   positionEffect: {fileID: 7353953344156497117}
   effects: 
   effectsSprites: []
-  abilitiesDamage: 
+  abilitiesDamage: 050000001e000000
   abilitiesCooldown: 
   anim: {fileID: 4077401038748206784}
   animDead: 0
@@ -479,6 +479,7 @@ MonoBehaviour:
   - TakeDamage - Cthulu
   - Idle - Cthulu
   - Attack - Cthulu
+  - Special Attack - Cthulu
   isElite: 0
   isBoss: 1
 --- !u!1 &3189844727717954570

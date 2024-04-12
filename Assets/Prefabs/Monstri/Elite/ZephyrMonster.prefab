@@ -470,7 +470,7 @@ MonoBehaviour:
   positionEffect: {fileID: 7353953344156497117}
   effects: 
   effectsSprites: []
-  abilitiesDamage: 
+  abilitiesDamage: 0a00000014000000
   abilitiesCooldown: 
   anim: {fileID: 4077401038748206784}
   animDead: 0
@@ -479,6 +479,7 @@ MonoBehaviour:
   - TakeDamage - Zephyr
   - Idle - Zephyr
   - Attack - Zephyr
+  - Special Attack - Zephyr
   isElite: 1
   isBoss: 0
 --- !u!1 &3189844727717954570

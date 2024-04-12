@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour
 
     //Player
     [SerializeField] private Slider healthPlayer;
+    [SerializeField] private float health;
 
     public bool rewardAttack;
     public bool rewardHealth;
@@ -61,6 +62,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Animator animPlayer;
     [SerializeField] private string[] animPlayerName;
 
+    //Sunete
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip[] audioClipPlayer;
+
     //Pasive
     [SerializeField] private int[] playerPassiveValue;
     [SerializeField] private int[] normalMonsterPassiveValue;
@@ -90,7 +95,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        
+        healthPlayer.value = health;
 
         //Cautare monstru
         if (!foundMonster)
@@ -205,11 +210,14 @@ public class GameManager : MonoBehaviour
     //Daca playerul moare, jocul se termina
     public void PlayerDamaged()
     {
-        healthPlayer.value -= monsterStats.abilitiesDamage[0];
-
-        if(healthPlayer.value <= 0)
+        if (health <= 0)
         {
-            playerLost.SetActive(true);
+            for (int i = 0; i < abilitesButtons.Length; i++)
+            {
+                abilitesButtons[i].GetComponent<Button>().interactable = false;
+            }
+            StartCoroutine(PlayPlayerAnimation(1, 4, 3));
+            StartCoroutine(ActivateLoseScreen(4));
         }
     }
 
@@ -225,7 +233,7 @@ public class GameManager : MonoBehaviour
 
             if (waves%5==0)
             {
-                Instantiate(eliteMonsters[0], eliteMonsters[0].transform.localPosition, Quaternion.identity, arenaZone.transform);
+                Instantiate(eliteMonsters[0 + eliteDefeated], eliteMonsters[0 + eliteDefeated].transform.localPosition, Quaternion.identity, arenaZone.transform);
                 Debug.Log("S-a spawnat monstrul elita!");
 
                 wavesText.text = "Lupta Elita";
@@ -342,14 +350,14 @@ public class GameManager : MonoBehaviour
 
                 index[1] = indexPrefabsAC.LastOrDefault();
 
-                StartCoroutine(PlayPlayerAnimation(4.8f, 1));
+                StartCoroutine(PlayPlayerAnimation(4.8f, 1, UnityEngine.Random.Range(4, 8)));
                 StartCoroutine(PlayMonsterAnimation(6, 1));
                 Invoke("PlayerSecondAbiility", 7f);
                 StartCoroutine(PlayMonsterAnimation(7, 2));
                 break;
             case 0:
 
-                StartCoroutine(PlayPlayerAnimation(5.5f, 0));
+                StartCoroutine(PlayPlayerAnimation(5.5f, 0, UnityEngine.Random.Range(0, 3)));
                 StartCoroutine(PlayMonsterAnimation(6, 1));
                 Invoke("PlayerFirstAbiility", 7f);
                 StartCoroutine(PlayMonsterAnimation(7, 2));
@@ -368,6 +376,7 @@ public class GameManager : MonoBehaviour
 
         turnText.text = "TURA MONSTRULUI";
         turnText.color = Color.red;
+
     }
 
     public void PlayerSecondAbiility()
@@ -383,13 +392,22 @@ public class GameManager : MonoBehaviour
 
         turnText.text = "TURA MONSTRULUI";
         turnText.color = Color.red;
+
     }
 
-    IEnumerator PlayPlayerAnimation(float time, int animType)
+    IEnumerator PlayPlayerAnimation(float time, int animType, int soundType)
     {
         
         yield return new WaitForSeconds(time);
         animPlayer.Play(animPlayerName[animType]);
+        audioSource.PlayOneShot(audioClipPlayer[soundType]);
+    }
+
+    IEnumerator ActivateLoseScreen(float time)
+    {
+
+        yield return new WaitForSeconds(time);
+        playerLost.SetActive(true);
     }
 
     /*public void PlayerThirdAbiility()
@@ -431,13 +449,17 @@ public class GameManager : MonoBehaviour
                 MonsterThirdAbiility();
                 break;*/
             case 1:
+                StartCoroutine(PlayMonsterAnimation(5f, 4));
+                StartCoroutine(PlayPlayerAnimation(6, 3, 8));
                 Invoke("MonsterSecondAbiility", 7f);
+                StartCoroutine(PlayPlayerAnimation(8, 2, 8));
+                StartCoroutine(PlayMonsterAnimation(8, 2));
                 break;
             case 0:
                 StartCoroutine(PlayMonsterAnimation(5f, 3));
-                StartCoroutine(PlayPlayerAnimation(6, 3));
+                StartCoroutine(PlayPlayerAnimation(6, 3, 8));
                 Invoke("MonsterFirstAbiility", 7f);
-                StartCoroutine(PlayPlayerAnimation(8, 2));
+                StartCoroutine(PlayPlayerAnimation(8, 2 , 8));
                 StartCoroutine(PlayMonsterAnimation(8, 2));
                 break;
         }
@@ -446,7 +468,7 @@ public class GameManager : MonoBehaviour
     public void MonsterFirstAbiility()
     {
 
-        healthPlayer.value -= monsterAbilitiesDamage[0] * dm.resultDices;
+        health -= monsterStats.abilitiesDamage[0] * dm.resultDices;
 
         for (int i = 0; i < abilitesButtons.Length; i++)
         {
@@ -456,12 +478,13 @@ public class GameManager : MonoBehaviour
         turnText.text = "TURA JUCATORULUI";
         turnText.color = Color.green;
 
+        PlayerDamaged();
     }
 
     public void MonsterSecondAbiility()
     {
-        
-        healthPlayer.value -= monsterAbilitiesDamage[1] * dm.resultDices;
+
+        health -= monsterStats.abilitiesDamage[1] * dm.resultDices;
 
         for (int i = 0; i < abilitesButtons.Length; i++)
         {
@@ -470,6 +493,8 @@ public class GameManager : MonoBehaviour
 
         turnText.text = "TURA JUCATORULUI";
         turnText.color = Color.green;
+
+        PlayerDamaged();
     }
 
     /*public void MonsterThirdAbiility()
@@ -491,6 +516,7 @@ public class GameManager : MonoBehaviour
 
         yield return new WaitForSeconds(time);
         monsterStats.anim.Play(monsterStats.typeAnim[animType]);
+        
     }
 
     

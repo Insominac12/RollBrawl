@@ -470,7 +470,7 @@ MonoBehaviour:
   positionEffect: {fileID: 7353953344156497117}
   effects: 
   effectsSprites: []
-  abilitiesDamage: 
+  abilitiesDamage: 0a0000000a000000
   abilitiesCooldown: 
   anim: {fileID: 4077401038748206784}
   animDead: 0
