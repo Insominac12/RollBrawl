@@ -17,6 +17,8 @@ public class DiceManager : MonoBehaviour
 
     public int resultDices;
 
+    public int rewardDice;
+
     public void RollDices()
     {
         Animator animLeftDice = leftDice.GetComponent<Animator>();
@@ -41,10 +43,10 @@ public class DiceManager : MonoBehaviour
         animLeftDice.enabled = false;
         animRightDice.enabled = false;
 
-        int randomLeftDice = Random.Range(0, 6);
-        int randomRightDice = Random.Range(0, 6);
+        int randomLeftDice = Random.Range(0 + rewardDice, 6);
+        int randomRightDice = Random.Range(0 + rewardDice, 6);
 
-        Debug.Log("Au picat numerele" + (randomLeftDice + 1) + ", " + (randomRightDice + 1));
+        Debug.Log("Au picat numerele" + (randomLeftDice + 1) + ", " + (randomRightDice + 1) + ", " + rewardDice);
 
         leftDice.GetComponent<Image>().sprite = typeDice[randomLeftDice];
         rightDice.GetComponent<Image>().sprite = typeDice[randomRightDice];

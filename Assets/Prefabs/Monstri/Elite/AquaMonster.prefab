@@ -588,7 +588,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthSlider: {fileID: 489970504688644009}
-  healthMonster: 1500
+  healthMonster: 2500
   dead: 0
   positionEffect: {fileID: 7353953344156497117}
   effects: 

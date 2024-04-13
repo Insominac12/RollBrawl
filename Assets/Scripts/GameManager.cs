@@ -30,9 +30,16 @@ public class GameManager : MonoBehaviour
     //Player
     [SerializeField] private Slider healthPlayer;
     [SerializeField] private float health;
+    [SerializeField] private float healthMax;
 
     public bool rewardAttack;
+    [SerializeField] private int attackReward;
+    [SerializeField] private Image[] abilitiesReward;
+
     public bool rewardHealth;
+    [SerializeField] private int healthReward;
+    [SerializeField] private Image hpReward;
+
     public bool rewardDice;
 
     [SerializeField] private int[] abilitiesCooldown;
@@ -95,6 +102,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+
         healthPlayer.value = health;
 
         //Cautare monstru
@@ -102,6 +110,14 @@ public class GameManager : MonoBehaviour
         {
             
             monsterStats = arenaZone.GetComponentInChildren<MonsterManager>();
+
+
+            if(monsterStats.isElite == false && monsterStats.isBoss == false)
+            {
+                monsterStats.healthMonster += monsterStats.healthMonster + (500 * eliteDefeated);
+                monsterStats.healthSlider.maxValue = monsterStats.healthMonster;
+            }
+            
 
             if (monsterStats != null)
             {
@@ -229,7 +245,24 @@ public class GameManager : MonoBehaviour
             waves += 1;
             wavesText.text = "Nivele " + waves + "/" + "16";
 
-            
+            if(rewardHealth == true)
+            {
+                health += 400;
+                healthReward = 1000;
+                hpReward.color = Color.yellow;
+            }
+            else
+            {
+                health += 200;
+            }
+
+            healthPlayer.maxValue = healthMax + healthReward;
+
+            if (rewardAttack == true)
+            {
+                abilitiesReward[0].color = Color.yellow;
+                abilitiesReward[1].color = Color.magenta;
+            }
 
             if (waves%5==0)
             {
@@ -278,6 +311,17 @@ public class GameManager : MonoBehaviour
     //Script pentru atac
     public void PlayerAttack(int whatAttack)
     {
+        if(rewardAttack == true)
+        {
+            attackReward = 40;
+
+        }
+
+        if(rewardDice == true)
+        {
+            dm.rewardDice = 3;
+        }
+
         if(playerCanAttack == true && playerTurn == true)
         {
             PlayerAbility(whatAttack);
@@ -291,6 +335,7 @@ public class GameManager : MonoBehaviour
 
     public void MonsterAttack(int whatAttack)
     {
+        dm.rewardDice = 0;
 
         MonsterAbility(whatAttack);
 
@@ -315,30 +360,6 @@ public class GameManager : MonoBehaviour
 
         switch (whatAbility)
         {
-            /*case 3:
-
-                prefabsAC.Add(Instantiate(prefabAbilityCooldown, abilitiesParent));
-                prefabsAC.LastOrDefault().transform.localPosition = abilitesPositions[3];
-                prefabsAC.LastOrDefault().GetComponentInChildren<TextMeshProUGUI>().text = abilitiesCooldown[3].ToString();
-
-                indexPrefabsAC.Add(prefabsAC.IndexOf(prefabsAC.LastOrDefault()));
-
-                index[3] = indexPrefabsAC.LastOrDefault();
-
-                Invoke("PlayerFourthAbiility", 7f);
-                break;
-            case 2:
-
-                prefabsAC.Add(Instantiate(prefabAbilityCooldown, abilitiesParent));
-                prefabsAC.LastOrDefault().transform.localPosition = abilitesPositions[2];
-                prefabsAC.LastOrDefault().GetComponentInChildren<TextMeshProUGUI>().text = abilitiesCooldown[2].ToString();
-
-                indexPrefabsAC.Add(prefabsAC.IndexOf(prefabsAC.LastOrDefault()));
-
-                index[2] = indexPrefabsAC.LastOrDefault();
-
-                Invoke("PlayerThirdAbiility", 7f);
-                break;*/
 
             case 1:
 
@@ -368,7 +389,7 @@ public class GameManager : MonoBehaviour
     public void PlayerFirstAbiility()
     {
         
-        monsterStats.healthMonster -= abilitiesDamage[0] * dm.resultDices;
+        monsterStats.healthMonster -= (abilitiesDamage[0] + attackReward) * dm.resultDices;
 
         monsterCanAttack = true;
 
@@ -383,7 +404,7 @@ public class GameManager : MonoBehaviour
     {
         if (!onCooldownAbility[index[1]])
         {
-            monsterStats.healthMonster -= abilitiesDamage[1] * dm.resultDices;
+            monsterStats.healthMonster -= (abilitiesDamage[1] + attackReward) * dm.resultDices;
             onCooldownAbility[index[1]] = true;
         }
 
@@ -410,28 +431,6 @@ public class GameManager : MonoBehaviour
         playerLost.SetActive(true);
     }
 
-    /*public void PlayerThirdAbiility()
-    {
-        if (!onCooldownAbility[index[2]])
-        {
-            monsterStats.healthMonster -= abilitiesDamage[2] * dm.resultDices;
-            onCooldownAbility[index[2]] = true;
-        }
-
-        playerTurn = false;
-    }
-
-    public void PlayerFourthAbiility()
-    {
-        if (!onCooldownAbility[index[3]])
-        {
-            monsterStats.healthMonster -= abilitiesDamage[3] * dm.resultDices;
-            onCooldownAbility[index[3]] = true;
-        }
-
-        playerTurn = false;
-    }*/
-
     #endregion
 
     #region Monster
@@ -442,12 +441,6 @@ public class GameManager : MonoBehaviour
 
         switch (whatAbility)
         {
-            /*case 3:
-                MonsterFourthAbiility();
-                break;
-            case 2:
-                MonsterThirdAbiility();
-                break;*/
             case 1:
                 StartCoroutine(PlayMonsterAnimation(5f, 4));
                 StartCoroutine(PlayPlayerAnimation(6, 3, 8));
@@ -496,20 +489,6 @@ public class GameManager : MonoBehaviour
 
         PlayerDamaged();
     }
-
-    /*public void MonsterThirdAbiility()
-    {
-       
-            healthPlayer.value -= abilitiesDamage[2];
-        
-    }
-
-    public void MonsterFourthAbiility()
-    {
-        
-            healthPlayer.value -= abilitiesDamage[3];
-        
-    }*/
 
     IEnumerator PlayMonsterAnimation(float time, int animType)
     {
