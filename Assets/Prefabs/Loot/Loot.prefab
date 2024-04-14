@@ -87,6 +87,7 @@ GameObject:
   - component: {fileID: 6086685895675239243}
   - component: {fileID: 7458576129097607668}
   - component: {fileID: 8018817820065780016}
+  - component: {fileID: 163444536798145416}
   m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
@@ -228,6 +229,19 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &163444536798145416
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1707058686213074672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 550e9e6d9d4d92f44a7c39b27d17ea36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tipToShow: 
 --- !u!1 &1787866874388625670
 GameObject:
   m_ObjectHideFlags: 0
@@ -304,6 +318,7 @@ GameObject:
   - component: {fileID: 3977216801073051386}
   - component: {fileID: 3427535127909117503}
   - component: {fileID: 1604439051147777075}
+  - component: {fileID: 994779976084472697}
   m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
@@ -445,6 +460,19 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &994779976084472697
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4221958294043218445}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 550e9e6d9d4d92f44a7c39b27d17ea36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tipToShow: 
 --- !u!1 &4300636917401384311
 GameObject:
   m_ObjectHideFlags: 0
@@ -458,6 +486,7 @@ GameObject:
   - component: {fileID: 5309853303929808854}
   - component: {fileID: 818225322583791933}
   - component: {fileID: 3487082050675752724}
+  - component: {fileID: 43761419265358921}
   m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
@@ -599,6 +628,19 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &43761419265358921
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4300636917401384311}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 550e9e6d9d4d92f44a7c39b27d17ea36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tipToShow: 
 --- !u!1 &4789435074354812929
 GameObject:
   m_ObjectHideFlags: 0
@@ -1029,7 +1071,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: CHOOSE REWARD
+  m_text: 'ALEGETI RASPLATA
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c4123468bd06c3b42b20abbb0c591d3b, type: 2}
   m_sharedMaterial: {fileID: -4237262082890844045, guid: c4123468bd06c3b42b20abbb0c591d3b, type: 2}

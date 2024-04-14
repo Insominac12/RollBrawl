@@ -5,9 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
-    
     public GameObject optionsScreen;
     public GameObject characterselectionScreen;
+    public GameObject LoadingScreen;
 
     void Start()
     {
@@ -34,6 +34,10 @@ public class MainMenu : MonoBehaviour
     public void CloseOptions()
     {
        optionsScreen.SetActive(false);
+    }
+    public void OpenLoadingScreen()
+    {
+       LoadingScreen.SetActive(true);
     }
 
     public void ExitGame()
