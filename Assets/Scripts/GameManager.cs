@@ -8,6 +8,7 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    public GameObject VictoryScreen;
     [SerializeField] private int waves;
     [SerializeField] private int eliteDefeated;
 
@@ -207,6 +208,8 @@ public class GameManager : MonoBehaviour
             }
         }
 
+        BossDefeated();
+
         
     }
 
@@ -234,6 +237,14 @@ public class GameManager : MonoBehaviour
             }
             StartCoroutine(PlayPlayerAnimation(1, 4, 3));
             StartCoroutine(ActivateLoseScreen(4));
+        }
+    }
+    //Daca bossul moare, player ul castiga
+    public void BossDefeated()
+    {
+         if(waves >= 18)
+        {
+           VictoryScreen.SetActive(true);  
         }
     }
 
