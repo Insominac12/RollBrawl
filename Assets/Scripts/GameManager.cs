@@ -9,6 +9,11 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     public GameObject VictoryScreen;
+    public AudioSource MuzicaLuptaNormala;
+    public AudioSource MuzicaLuptaZephyr;
+    public AudioSource MuzicaLuptaMoradin;
+    public AudioSource MuzicaLuptaAqua;
+    public AudioSource MuzicaLuptaBoss;
     [SerializeField] private int waves;
     [SerializeField] private int eliteDefeated;
 

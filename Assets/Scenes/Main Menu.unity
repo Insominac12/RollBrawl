@@ -277,6 +277,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Play Button
       objectReference: {fileID: 0}
+    - target: {fileID: 4327293472246882714, guid: c33093bd4e266114cbcada515fbfb697, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7057581247251904392, guid: c33093bd4e266114cbcada515fbfb697, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
