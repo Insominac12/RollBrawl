@@ -468,7 +468,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthSlider: {fileID: 489970504688644009}
-  healthMonster: 3000
+  healthMonster: 3500
   dead: 0
   positionEffect: {fileID: 7353953344156497117}
   effects: 
@@ -497,6 +497,7 @@ MonoBehaviour:
   animDeathNumber: 3
   maxNormalAttackSounds: 3
   maxManySpecialAttackSounds: 7
+  soundDeath: 0
 --- !u!1 &3189844727717954570
 GameObject:
   m_ObjectHideFlags: 0
