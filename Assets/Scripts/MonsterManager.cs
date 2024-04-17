@@ -19,16 +19,25 @@ public class MonsterManager : MonoBehaviour
     public int[] abilitiesCooldown;
 
     public Animator anim;
+    public AudioSource audioSourceScene;
     public bool animDead;
     public string[] typeAnim;
 
     public bool isElite;
     public bool isBoss;
 
+    public AudioClip[] soundsMonster;
+
+    public int animDeathNumber;
+    public int maxNormalAttackSounds;
+    public int maxManySpecialAttackSounds;
+
+    public bool soundDeath;
     // Start is called before the first frame update
     void Start()
     {
         healthSlider.maxValue = healthMonster;
+        audioSourceScene = GameObject.Find("Sunet caractere").GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -41,8 +50,15 @@ public class MonsterManager : MonoBehaviour
             dead = true;
             Destroy(this.gameObject, 2f);
 
+            healthMonster = 0;
 
             anim.Play(typeAnim[0]);
+
+            if(soundDeath == false)
+            {
+                audioSourceScene.PlayOneShot(soundsMonster[animDeathNumber]);
+                soundDeath = true;
+            }
         }
     }
 

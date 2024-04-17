@@ -610,6 +610,7 @@ MonoBehaviour:
   abilitiesDamage: 140000001e000000
   abilitiesCooldown: 
   anim: {fileID: 4077401038748206784}
+  audioSourceScene: {fileID: 0}
   animDead: 0
   typeAnim:
   - Die - Aqua
@@ -619,6 +620,15 @@ MonoBehaviour:
   - Special Attack - Aqua
   isElite: 1
   isBoss: 0
+  soundsMonster:
+  - {fileID: 8300000, guid: 3893e78870f27d84c9696079da97ea3e, type: 3}
+  - {fileID: 8300000, guid: ca5eaf909f84ac849902c1bfe58473cd, type: 3}
+  - {fileID: 8300000, guid: e91b7182f8b6b1c4fa596fb5f35ccd1d, type: 3}
+  - {fileID: 8300000, guid: 030cc02ae9ea0de4bb7200631ecd68be, type: 3}
+  - {fileID: 8300000, guid: b01ac78a64f067545a70e339718b8ace, type: 3}
+  animDeathNumber: 2
+  maxNormalAttackSounds: 2
+  maxManySpecialAttackSounds: 5
 --- !u!1 &3189844727717954570
 GameObject:
   m_ObjectHideFlags: 0

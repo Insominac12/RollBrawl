@@ -473,6 +473,7 @@ MonoBehaviour:
   abilitiesDamage: 0f00000019000000
   abilitiesCooldown: 
   anim: {fileID: 4077401038748206784}
+  audioSourceScene: {fileID: 0}
   animDead: 0
   typeAnim:
   - Die - Zephyr
@@ -482,6 +483,15 @@ MonoBehaviour:
   - Special Attack - Zephyr
   isElite: 1
   isBoss: 0
+  soundsMonster:
+  - {fileID: 8300000, guid: 7267fd7966a5df94498c00138968dd2a, type: 3}
+  - {fileID: 8300000, guid: 71e5d43d0eb36ac41a0aeea65a65c5c7, type: 3}
+  - {fileID: 8300000, guid: adb830138e5495a4d972067a97740480, type: 3}
+  - {fileID: 8300000, guid: 7cfecf852df6bb341aa02a23e8dccd60, type: 3}
+  - {fileID: 8300000, guid: 73c5ec4f9f02ada40a5e701c1a026477, type: 3}
+  animDeathNumber: 2
+  maxNormalAttackSounds: 2
+  maxManySpecialAttackSounds: 5
 --- !u!1 &3189844727717954570
 GameObject:
   m_ObjectHideFlags: 0

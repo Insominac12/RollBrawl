@@ -473,6 +473,7 @@ MonoBehaviour:
   abilitiesDamage: 0a0000000a000000
   abilitiesCooldown: 
   anim: {fileID: 4077401038748206784}
+  audioSourceScene: {fileID: 0}
   animDead: 0
   typeAnim:
   - Die - Mushroom
@@ -481,6 +482,14 @@ MonoBehaviour:
   - Attack - Mushroom
   isElite: 0
   isBoss: 0
+  soundsMonster:
+  - {fileID: 8300000, guid: edfb7d80b031f794dad92e5fb7db082a, type: 3}
+  - {fileID: 8300000, guid: c9a6a63066b820f429470e0bcfd99ebd, type: 3}
+  - {fileID: 8300000, guid: fda50d9adefa2e541bd55cc6a7e25a2d, type: 3}
+  - {fileID: 8300000, guid: fb41b2239128eed4d916f20c5e41f206, type: 3}
+  animDeathNumber: 3
+  maxNormalAttackSounds: 3
+  maxManySpecialAttackSounds: 0
 --- !u!1 &3189844727717954570
 GameObject:
   m_ObjectHideFlags: 0

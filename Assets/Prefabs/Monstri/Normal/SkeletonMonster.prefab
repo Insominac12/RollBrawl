@@ -473,6 +473,7 @@ MonoBehaviour:
   abilitiesDamage: 0f0000000a000000
   abilitiesCooldown: 
   anim: {fileID: 4077401038748206784}
+  audioSourceScene: {fileID: 0}
   animDead: 0
   typeAnim:
   - Die - Skeleton
@@ -481,6 +482,14 @@ MonoBehaviour:
   - Attack - Skeleton
   isElite: 0
   isBoss: 0
+  soundsMonster:
+  - {fileID: 8300000, guid: a363eaa6a9204f8449f42d4c8a6b7dd0, type: 3}
+  - {fileID: 8300000, guid: c4e638e767c8be84ebb0b8aeb9b91cda, type: 3}
+  - {fileID: 8300000, guid: ace9f0a0e178b6d409eaa6662f9ffa26, type: 3}
+  - {fileID: 8300000, guid: 5e728a32d560dbc4899d526f3bd74123, type: 3}
+  animDeathNumber: 3
+  maxNormalAttackSounds: 3
+  maxManySpecialAttackSounds: 0
 --- !u!1 &3189844727717954570
 GameObject:
   m_ObjectHideFlags: 0

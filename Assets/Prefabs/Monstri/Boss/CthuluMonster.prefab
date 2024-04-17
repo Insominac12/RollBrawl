@@ -473,6 +473,7 @@ MonoBehaviour:
   abilitiesDamage: 1400000023000000
   abilitiesCooldown: 
   anim: {fileID: 4077401038748206784}
+  audioSourceScene: {fileID: 0}
   animDead: 0
   typeAnim:
   - Die - Cthulu
@@ -482,6 +483,17 @@ MonoBehaviour:
   - Special Attack - Cthulu
   isElite: 0
   isBoss: 1
+  soundsMonster:
+  - {fileID: 8300000, guid: 644e5a33be8d2e440bbca0287871cb58, type: 3}
+  - {fileID: 8300000, guid: b4e78a9c2efe33547b377db21ceae6d4, type: 3}
+  - {fileID: 8300000, guid: 78466868721b4904885ab6e20c44752c, type: 3}
+  - {fileID: 8300000, guid: bfee4573831379e459f7f8efe481ab1b, type: 3}
+  - {fileID: 8300000, guid: 825402382e9f9304ba2ad32590e60c63, type: 3}
+  - {fileID: 8300000, guid: 0bcd8dd0593de104db71778d01e4d2ee, type: 3}
+  - {fileID: 8300000, guid: 602126d30d88ae84ba24210d9ec091b3, type: 3}
+  animDeathNumber: 3
+  maxNormalAttackSounds: 3
+  maxManySpecialAttackSounds: 7
 --- !u!1 &3189844727717954570
 GameObject:
   m_ObjectHideFlags: 0

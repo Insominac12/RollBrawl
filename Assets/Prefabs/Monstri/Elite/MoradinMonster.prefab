@@ -476,6 +476,7 @@ MonoBehaviour:
   abilitiesDamage: 1400000019000000
   abilitiesCooldown: 
   anim: {fileID: 4077401038748206784}
+  audioSourceScene: {fileID: 0}
   animDead: 0
   typeAnim:
   - Die - Moradin
@@ -485,6 +486,17 @@ MonoBehaviour:
   - Special Attack - Moradin
   isElite: 1
   isBoss: 0
+  soundsMonster:
+  - {fileID: 8300000, guid: 034fb37228599e34380a7ab04d485c34, type: 3}
+  - {fileID: 8300000, guid: 295e908f61f30ea4d95ff041f10642de, type: 3}
+  - {fileID: 8300000, guid: d9d4aeccbeb62074898cfa665da405a7, type: 3}
+  - {fileID: 8300000, guid: 2538ab2a11f887141bf91d806e9dd7e8, type: 3}
+  - {fileID: 8300000, guid: 7104cdffdcea96b4e9194fb91af9bcc0, type: 3}
+  - {fileID: 8300000, guid: 2275b043be2c2144ea601543f6209ea3, type: 3}
+  - {fileID: 8300000, guid: 29f0f478d8c6fbb48975f0dfb2725ad5, type: 3}
+  animDeathNumber: 3
+  maxNormalAttackSounds: 3
+  maxManySpecialAttackSounds: 7
 --- !u!1 &3189844727717954570
 GameObject:
   m_ObjectHideFlags: 0

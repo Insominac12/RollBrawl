@@ -8,12 +8,11 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    public GameObject VictoryScreen;
-    public AudioSource MuzicaLuptaNormala;
-    public AudioSource MuzicaLuptaZephyr;
-    public AudioSource MuzicaLuptaMoradin;
-    public AudioSource MuzicaLuptaAqua;
-    public AudioSource MuzicaLuptaBoss;
+    [SerializeField] private GameObject VictoryScreen;
+
+    [SerializeField] private AudioClip VictoryMusic;
+    [SerializeField] private AudioClip LostMusic;
+
     [SerializeField] private int waves;
     [SerializeField] private int eliteDefeated;
 
@@ -79,6 +78,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip[] audioClipPlayer;
 
+    [SerializeField] private AudioSource muzica;
+    [SerializeField] private AudioClip[] melodiiLupta;
+
+    [SerializeField] private AudioClip[] audioClipMonster;
+
     //Pasive
     [SerializeField] private int[] playerPassiveValue;
     [SerializeField] private int[] normalMonsterPassiveValue;
@@ -102,7 +106,8 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        muzica.clip = melodiiLupta[0];
+        muzica.Play();
     }
 
     // Update is called once per frame
@@ -110,6 +115,7 @@ public class GameManager : MonoBehaviour
     {
 
         healthPlayer.value = health;
+        healthPlayer.maxValue = healthMax + healthReward;
 
         //Cautare monstru
         if (!foundMonster)
@@ -213,9 +219,6 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        BossDefeated();
-
-        
     }
 
     //Sistem pauza joc, cand playerul intra in setari
@@ -242,16 +245,14 @@ public class GameManager : MonoBehaviour
             }
             StartCoroutine(PlayPlayerAnimation(1, 4, 3));
             StartCoroutine(ActivateLoseScreen(4));
+
+            muzica.Stop();
+            muzica.clip = LostMusic;
+            muzica.Play();
         }
     }
-    //Daca bossul moare, player ul castiga
-    public void BossDefeated()
-    {
-         if(waves >= 18)
-        {
-           VictoryScreen.SetActive(true);  
-        }
-    }
+
+   
 
     //Script spawnare monstri
     public void Waves()
@@ -263,16 +264,29 @@ public class GameManager : MonoBehaviour
 
             if(rewardHealth == true)
             {
-                health += 400;
+                if(health >= healthMax)
+                {
+                    health = healthMax;
+                }
+                else
+                {
+                    health += 400;
+                }
+                
                 healthReward = 1000;
                 hpReward.color = Color.yellow;
             }
             else
             {
-                health += 200;
+                if (health >= healthMax)
+                {
+                    health = healthMax;
+                }
+                else
+                {
+                    health += 200;
+                }
             }
-
-            healthPlayer.maxValue = healthMax + healthReward;
 
             if (rewardAttack == true)
             {
@@ -284,17 +298,36 @@ public class GameManager : MonoBehaviour
             {
                 Instantiate(eliteMonsters[0 + eliteDefeated], eliteMonsters[0 + eliteDefeated].transform.localPosition, Quaternion.identity, arenaZone.transform);
                 Debug.Log("S-a spawnat monstrul elita!");
+                muzica.Stop();
+                muzica.clip = melodiiLupta[1 + eliteDefeated];
+                muzica.Play();
 
                 wavesText.text = "Lupta Elita";
             }
-            else if (waves >= 17)
+            else if (waves == 17)
             {
                 Instantiate(bossMonsters[0], bossMonsters[0].transform.localPosition, Quaternion.identity, arenaZone.transform);
 
+                muzica.Stop();
+                muzica.clip = melodiiLupta[4];
+                muzica.Play();
+
                 wavesText.text = "Lupta Boss";
+            }
+            else if (waves >= 18)
+            {
+                VictoryScreen.SetActive(true);
+
+                muzica.Stop();
+                muzica.clip = VictoryMusic;
+                muzica.Play();
             }
             else if (waves % 5 == 1)
             {
+                muzica.Stop();
+                muzica.clip = melodiiLupta[0];
+                muzica.Play();
+
                 eliteDefeated += 1;
                 eliteText.text = "Elite " + eliteDefeated + "/" + "3";
                 GameObject rewards = Instantiate(lootElite[0], lootElite[0].transform.localPosition, Quaternion.identity, arenaZone.transform);
@@ -306,6 +339,7 @@ public class GameManager : MonoBehaviour
             {
                 if(loot == false)
                 {
+                    
                     int randomMon = UnityEngine.Random.Range(0,2);
                     Instantiate(normalMonsters[randomMon], normalMonsters[randomMon].transform.localPosition, Quaternion.identity, arenaZone.transform);
                     Debug.Log("S-a spawnat monstru normal!");
@@ -388,16 +422,16 @@ public class GameManager : MonoBehaviour
                 index[1] = indexPrefabsAC.LastOrDefault();
 
                 StartCoroutine(PlayPlayerAnimation(4.8f, 1, UnityEngine.Random.Range(4, 8)));
-                StartCoroutine(PlayMonsterAnimation(6, 1));
+                StartCoroutine(PlayMonsterAnimation(6, 1, 8));
                 Invoke("PlayerSecondAbiility", 7f);
-                StartCoroutine(PlayMonsterAnimation(7, 2));
+                StartCoroutine(PlayMonsterAnimation(7, 2, 8));
                 break;
             case 0:
 
                 StartCoroutine(PlayPlayerAnimation(5.5f, 0, UnityEngine.Random.Range(0, 3)));
-                StartCoroutine(PlayMonsterAnimation(6, 1));
+                StartCoroutine(PlayMonsterAnimation(6, 1, 8));
                 Invoke("PlayerFirstAbiility", 7f);
-                StartCoroutine(PlayMonsterAnimation(7, 2));
+                StartCoroutine(PlayMonsterAnimation(7, 2, 8));
                 break;
         }
     }
@@ -458,18 +492,18 @@ public class GameManager : MonoBehaviour
         switch (whatAbility)
         {
             case 1:
-                StartCoroutine(PlayMonsterAnimation(5f, 4));
+                StartCoroutine(PlayMonsterAnimation(5f, 4, UnityEngine.Random.Range(monsterStats.animDeathNumber + 1, monsterStats.maxManySpecialAttackSounds)));
                 StartCoroutine(PlayPlayerAnimation(6, 3, 8));
                 Invoke("MonsterSecondAbiility", 7f);
                 StartCoroutine(PlayPlayerAnimation(8, 2, 8));
-                StartCoroutine(PlayMonsterAnimation(8, 2));
+                StartCoroutine(PlayMonsterAnimation(8, 2, 8));
                 break;
             case 0:
-                StartCoroutine(PlayMonsterAnimation(5f, 3));
+                StartCoroutine(PlayMonsterAnimation(5f, 3, UnityEngine.Random.Range(0, monsterStats.maxNormalAttackSounds)));
                 StartCoroutine(PlayPlayerAnimation(6, 3, 8));
                 Invoke("MonsterFirstAbiility", 7f);
                 StartCoroutine(PlayPlayerAnimation(8, 2 , 8));
-                StartCoroutine(PlayMonsterAnimation(8, 2));
+                StartCoroutine(PlayMonsterAnimation(8, 2, 8));
                 break;
         }
     }
@@ -506,12 +540,12 @@ public class GameManager : MonoBehaviour
         PlayerDamaged();
     }
 
-    IEnumerator PlayMonsterAnimation(float time, int animType)
+    IEnumerator PlayMonsterAnimation(float time, int animType, int soundType)
     {
 
         yield return new WaitForSeconds(time);
         monsterStats.anim.Play(monsterStats.typeAnim[animType]);
-        
+        audioSource.PlayOneShot(monsterStats.soundsMonster[soundType]);
     }
 
     
