@@ -2839,8 +2839,8 @@ MonoBehaviour:
   - {fileID: 7650467589780638201, guid: 7088a085a48b86844aaec5ae7d1a8e67, type: 3}
   loot: 0
   healthPlayer: {fileID: 2003245578}
-  health: 2500
-  healthMax: 2500
+  health: 3250
+  healthMax: 3250
   rewardAttack: 0
   attackReward: 0
   abilitiesReward:

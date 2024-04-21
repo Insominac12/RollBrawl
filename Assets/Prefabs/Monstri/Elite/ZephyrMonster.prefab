@@ -470,7 +470,7 @@ MonoBehaviour:
   positionEffect: {fileID: 7353953344156497117}
   effects: 
   effectsSprites: []
-  abilitiesDamage: 0f00000019000000
+  abilitiesDamage: 0f00000014000000
   abilitiesCooldown: 
   anim: {fileID: 4077401038748206784}
   audioSourceScene: {fileID: 0}
@@ -492,6 +492,7 @@ MonoBehaviour:
   animDeathNumber: 2
   maxNormalAttackSounds: 2
   maxManySpecialAttackSounds: 5
+  soundDeath: 0
 --- !u!1 &3189844727717954570
 GameObject:
   m_ObjectHideFlags: 0
