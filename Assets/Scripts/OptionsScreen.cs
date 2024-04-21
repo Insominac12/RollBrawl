@@ -113,7 +113,7 @@ public class OptionsScreen : MonoBehaviour
 
     public void SetMusicVol()
     {
-        musicLabel.text = Mathf.RoundToInt(musicSlider.value + 80).ToString();
+        musicLabel.text = Mathf.RoundToInt(musicSlider.value + 100).ToString();
 
         theMixer.SetFloat("MusicVol", musicSlider.value);
         
@@ -122,7 +122,7 @@ public class OptionsScreen : MonoBehaviour
 
     public void SetSfxVol()
     {
-        sfxLabel.text = Mathf.RoundToInt(sfxSlider.value + 80).ToString();
+        sfxLabel.text = Mathf.RoundToInt(sfxSlider.value + 100).ToString();
 
         theMixer.SetFloat("SfxVol", sfxSlider.value);
         
