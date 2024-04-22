@@ -270,7 +270,7 @@ public class GameManager : MonoBehaviour
                 }
                 else
                 {
-                    health += 400;
+                    health += 600;
                 }
                 
                 healthReward = 1000;
@@ -284,7 +284,7 @@ public class GameManager : MonoBehaviour
                 }
                 else
                 {
-                    health += 200;
+                    health += 400;
                 }
             }
 
